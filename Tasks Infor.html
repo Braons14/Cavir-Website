@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Biografi Kelompok 4 Orang</title>
+  <!-- Tailwind CSS CDN (latest) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Import Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+  <style>
+    /* Apply Inter font globally */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Slideshow fade animation */
+    .fade-enter {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .fade-enter-active {
+      opacity: 1;
+    }
+    .fade-exit {
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+    .fade-exit-active {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- HEADER -->
+  <header
+    class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-indigo-600 via-purple-700 to-pink-600 text-white flex items-center gap-4 px-6 py-3 shadow-md"
+  >
+    <!-- Logo placeholder -->
+    <div class="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
+      <span class="text-indigo-700 font-bold text-xl select-none">KG</span>
+    </div>
+    <!-- Group name -->
+    <h1 class="text-2xl font-semibold select-none">Kelompok 4 Orang</h1>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow pt-20 relative overflow-hidden">
+
+    <!-- HOMEPAGE CONTENT -->
+    <section id="homepage" class="relative w-full h-[calc(100vh-5rem)]">
+
+      <!-- SLIDESHOW BACKGROUND CONTAINER -->
+      <div
+        id="slideshow"
+        class="absolute inset-0 overflow-hidden"
+        aria-label="Slideshow Latar Belakang"
+      >
+        <!-- Images will be injected by JS -->
+      </div>
+
+      <!-- CONTENT OVERLAY -->
+      <div
+        class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center"
+      >
+        <!-- Profiles container -->
+        <div
+          class="flex flex-col md:flex-row justify-center items-start gap-6 md:gap-8 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg"
+          aria-label="Profil anggota kelompok"
+        >
+          <!-- Each profile: photo + bio box -->
+          <!-- Profiles will be injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL PAGE CONTENT (hidden initially) -->
+    <section
+      id="detailpage"
+      class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-5rem)] rounded-xl"
+      aria-label="Halaman detail individu"
+    >
+      <!-- Content injected by JS -->
+    </section>
+  </main>
+
+  <script>
+    // ===== DATA DEFINISI ANGGOTA =====
+    // Placeholder images can be replaced manually by editing the src strings.
+    // For background slideshow, use 16:9 aspect ratio images.
+    // For profile photos, use 1:1 aspect ratio images.
+    // For detail photos, use 16:9 aspect ratio images.
+
+    const groupMembers = [
+      {
+        id: 'member1',
+        name: 'Andi Pratama',
+        profilePhoto: 'e:\File Io\Logo Kelompok Informatika.jpg', // Kosongkan untuk placeholder
+        bioShort:
+          'Andi adalah anggota yang ahli dalam pengembangan web dan desain UI/UX.',
+        detailPhotos: [
+          { src: 'e:\File Io\DSCF3233.JPG', caption: 'Andi sedang presentasi proyek.' },
+          { src: '', caption: 'Andi bekerja sama dengan tim.' },
+          { src: '', caption: 'Andi menerima penghargaan inovasi.' },
+        ],
+      },
+      {
+        id: 'member2',
+        name: 'Budi Santoso',
+        profilePhoto: '',
+        bioShort:
+          'Budi fokus pada backend development dan manajemen database.',
+        detailPhotos: [
+          { src: '', caption: 'Budi mengelola server dan database.' },
+          { src: '', caption: 'Budi berdiskusi dengan tim teknis.' },
+          { src: '', caption: 'Budi mengikuti konferensi teknologi.' },
+        ],
+      },
+      {
+        id: 'member3',
+        name: 'Citra Dewi',
+        profilePhoto: '',
+        bioShort:
+          'Citra adalah ahli komunikasi dan dokumentasi proyek kelompok.',
+        detailPhotos: [
+          { src: '', caption: 'Citra menulis dokumentasi proyek.' },
+          { src: '', caption: 'Citra memimpin rapat tim.' },
+          { src: '', caption: 'Citra berinteraksi dengan klien.' },
+        ],
+      },
+      {
+        id: 'member4',
+        name: 'Dewi Lestari',
+        profilePhoto: '',
+        bioShort:
+          'Dewi bertanggung jawab pada testing dan quality assurance.',
+        detailPhotos: [
+          { src: '', caption: 'Dewi melakukan pengujian aplikasi.' },
+          { src: '', caption: 'Dewi menganalisa hasil testing.' },
+          { src: '', caption: 'Dewi memberikan feedback ke developer.' },
+        ],
+      },
+    ];
+
+    // Slideshow background images (16:9)
+    const slideshowImages = [
+      'e:\File Io\DSCF3084.JPG', // Kosongkan untuk placeholder
+      'e:\File Io\DSCF3117.JPG',
+      'https://www.google.com/imgres?q=alam&imgurl=https%3A%2F%2Fcdn-1.timesmedia.co.id%2Fimages%2F2023%2F06%2F11%2FSumba.jpg&imgrefurl=https%3A%2F%2Ftimesindonesia.co.id%2Fwisata%2F457519%2Fkeindahan-alam-pulau-sumba-menarik-sejumlah-fotografer-indonesia&docid=DO6zjty864GJXM&tbnid=3Lh-QDE_r349uM&vet=12ahUKEwjC99nZhL6PAxWJ6jgGHXboBrQQM3oECBcQAA..i&w=750&h=500&hcb=2&ved=2ahUKEwjC99nZhL6PAxWJ6jgGHXboBrQQM3oECBcQAA',
+      '',
+    ];
+
+    // ===== UTILITY FUNCTION: CREATE IMAGE ELEMENT WITH RATIO CONTAINER =====
+    /**
+     * Membuat elemen gambar dengan rasio aspek tertentu menggunakan Tailwind.
+     * @param {string} src - URL gambar
+     * @param {string} alt - teks alternatif
+     * @param {string} aspectRatioClass - Tailwind aspect-ratio class, contoh: 'aspect-video' (16:9), 'aspect-square' (1:1)
+     * @param {string} extraClasses - kelas tambahan Tailwind
+     * @returns {HTMLElement} elemen div pembungkus dengan img di dalamnya
+     */
+    function createImageWithRatio(src, alt, aspectRatioClass, extraClasses = '') {
+      const wrapper = document.createElement('div');
+      wrapper.className = `overflow-hidden rounded-xl shadow-md ${aspectRatioClass} ${extraClasses} bg-gray-200 flex items-center justify-center`;
+      const img = document.createElement('img');
+      img.alt = alt;
+      img.className = 'object-cover w-full h-full select-none';
+      if (src.trim() === '') {
+        // Placeholder: simple icon or text
+        const placeholderText = document.createElement('span');
+        placeholderText.className =
+          'text-gray-400 text-sm select-none pointer-events-none';
+        placeholderText.textContent = 'Gambar Kosong';
+        wrapper.appendChild(placeholderText);
+      } else {
+        img.src = src;
+        wrapper.appendChild(img);
+      }
+      return wrapper;
+    }
+
+    // ===== SLIDESHOW IMPLEMENTATION =====
+    const slideshowContainer = document.getElementById('slideshow');
+    let currentSlideIndex = 0;
+    let slideshowTimeout;
+
+    /**
+     * Membuat elemen gambar slideshow dan menampilkannya dengan efek fade.
+     */
+    function showSlide(index) {
+      // Hapus gambar lama (jika ada)
+      while (slideshowContainer.firstChild) {
+        slideshowContainer.removeChild(slideshowContainer.firstChild);
+      }
+
+      // Buat gambar baru
+      const src = slideshowImages[index];
+      const alt = `Slideshow image ${index + 1}`;
+      const imgWrapper = createImageWithRatio(
+        src,
+        alt,
+        'aspect-video',
+        'w-full h-full absolute top-0 left-0'
+      );
+      imgWrapper.style.transition = 'opacity 1s ease-in-out';
+      imgWrapper.style.opacity = '0';
+
+      slideshowContainer.appendChild(imgWrapper);
+
+      // Trigger fade-in
+      requestAnimationFrame(() => {
+        imgWrapper.style.opacity = '1';
+      });
+    }
+
+    /**
+     * Melanjutkan ke slide berikutnya secara otomatis.
+     */
+    function nextSlide() {
+      currentSlideIndex = (currentSlideIndex + 1) % slideshowImages.length;
+      showSlide(currentSlideIndex);
+      slideshowTimeout = setTimeout(nextSlide, 3000);
+    }
+
+    // ===== RENDER HALAMAN BERANDA =====
+    const homepageSection = document.getElementById('homepage');
+    const detailpageSection = document.getElementById('detailpage');
+
+    /**
+     * Render profil anggota di halaman beranda.
+     */
+    function renderHomeProfiles() {
+      // Cari container profil (flex container)
+      const profilesContainer = homepageSection.querySelector(
+        'div[aria-label="Profil anggota kelompok"]'
+      );
+      profilesContainer.innerHTML = '';
+
+      groupMembers.forEach((member) => {
+        // Container profil individual
+        const profileDiv = document.createElement('article');
+        profileDiv.className =
+          'flex flex-col items-center max-w-xs md:max-w-[18rem] cursor-pointer select-none';
+
+        // Foto profil (1:1)
+        const photo = createImageWithRatio(
+          member.profilePhoto,
+          `Foto profil ${member.name}`,
+          'aspect-square',
+          'rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300'
+        );
+        photo.classList.add('w-32', 'md:w-40');
+        profileDiv.appendChild(photo);
+
+        // Nama anggota
+        const nameEl = document.createElement('h2');
+        nameEl.textContent = member.name;
+        nameEl.className =
+          'mt-3 text-lg font-semibold text-gray-800 text-center select-text';
+        profileDiv.appendChild(nameEl);
+
+        // Kotak bio singkat
+        const bioBox = document.createElement('div');
+        bioBox.className =
+          'mt-2 bg-white rounded-lg shadow-md p-3 text-gray-700 text-sm text-center';
+        bioBox.textContent = member.bioShort;
+        profileDiv.appendChild(bioBox);
+
+        // Event klik untuk navigasi ke detail
+        profileDiv.addEventListener('click', () => {
+          showDetailPage(member.id);
+        });
+
+        profilesContainer.appendChild(profileDiv);
+      });
+    }
+
+    // ===== RENDER HALAMAN DETAIL =====
+    /**
+     * Render halaman detail individu berdasarkan id anggota.
+     * @param {string} memberId
+     */
+    function showDetailPage(memberId) {
+      // Cari data anggota
+      const member = groupMembers.find((m) => m.id === memberId);
+      if (!member) return;
+
+      // Sembunyikan homepage, tampilkan detailpage
+      homepageSection.classList.add('hidden');
+      detailpageSection.classList.remove('hidden');
+
+      // Kosongkan konten detailpage
+      detailpageSection.innerHTML = '';
+
+      // Container utama detail: grid 3 baris 2 kolom (foto kiri, teks kanan)
+      const container = document.createElement('div');
+      container.className =
+        'grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 rounded-xl p-6 shadow-lg min-h-[60vh]';
+
+      // Kiri: foto (3 baris)
+      const photosContainer = document.createElement('div');
+      photosContainer.className = 'flex flex-col gap-6';
+
+      member.detailPhotos.forEach((photoData, idx) => {
+        // Wrapper foto + teks
+        const photoTextWrapper = document.createElement('div');
+        photoTextWrapper.className = 'flex gap-4 items-center';
+
+        // Foto (16:9) dengan fixed width dan height responsive
+        const photoEl = createImageWithRatio(
+          photoData.src,
+          `Foto detail ${member.name} ${idx + 1}`,
+          'aspect-video',
+          'w-40 md:w-48 flex-shrink-0 rounded-xl shadow-md'
+        );
+
+        // Teks deskripsi foto
+        const caption = document.createElement('p');
+        caption.textContent = photoData.caption;
+        caption.className = 'text-gray-700 text-sm md:text-base';
+
+        photoTextWrapper.appendChild(photoEl);
+        photoTextWrapper.appendChild(caption);
+
+        photosContainer.appendChild(photoTextWrapper);
+      });
+
+      // Kanan: bio lengkap (gabungkan semua caption sebagai contoh)
+      const bioContainer = document.createElement('article');
+      bioContainer.className =
+        'bg-white rounded-xl shadow-md p-6 text-gray-800 text-justify';
+
+      // Judul nama anggota
+      const title = document.createElement('h2');
+      title.textContent = member.name;
+      title.className = 'text-2xl font-bold mb-4 select-text';
+      bioContainer.appendChild(title);
+
+      // Contoh bio lengkap (gabungkan bioShort + detail captions)
+      const bioFull = document.createElement('p');
+      bioFull.className = 'mb-6 leading-relaxed';
+      bioFull.textContent =
+        member.bioShort +
+        ' Berikut beberapa momen penting yang menggambarkan peran dan kontribusinya dalam kelompok: ' +
+        member.detailPhotos.map((d) => d.caption).join('; ') +
+        '.';
+      bioContainer.appendChild(bioFull);
+
+      // Tombol kembali
+      const backButton = document.createElement('button');
+      backButton.textContent = 'Kembali';
+      backButton.className =
+        'mt-4 px-5 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400';
+      backButton.addEventListener('click', () => {
+        detailpageSection.classList.add('hidden');
+        homepageSection.classList.remove('hidden');
+      });
+      bioContainer.appendChild(backButton);
+
+      container.appendChild(photosContainer);
+      container.appendChild(bioContainer);
+
+      detailpageSection.appendChild(container);
+
+      // Scroll to top detail page for better UX
+      detailpageSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ===== INISIALISASI =====
+    function init() {
+      // Render homepage profiles
+      renderHomeProfiles();
+
+      // Start slideshow if images available
+      if (slideshowImages.length > 0) {
+        showSlide(currentSlideIndex);
+        slideshowTimeout = setTimeout(nextSlide, 3000);
+      } else {
+        // Jika tidak ada gambar, tampilkan latar abu-abu gelap
+        slideshowContainer.style.backgroundColor = '#4B5563'; // Tailwind gray-700
+      }
+    }
+
+    // Jalankan inisialisasi setelah DOM siap
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
