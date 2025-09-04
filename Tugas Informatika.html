@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kelompok 4 - Biografi</title>
+  <!-- Tailwind CSS CDN (latest) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Import Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+  <style>
+    /* Apply Inter font globally */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Slideshow fade animation */
+    .fade-enter {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .fade-enter-active {
+      opacity: 1;
+    }
+    .fade-exit {
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+    }
+    .fade-exit-active {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-gray-50">
+
+  <!-- HEADER -->
+  <header
+    class="fixed top-0 left-0 right-0 z-50 flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-700 text-white shadow-lg"
+  >
+    <!-- Logo placeholder: simple SVG circle with group icon -->
+    <div class="flex items-center justify-center w-12 h-12 bg-grey rounded-full shadow-md shrink-0">
+      <img src="e:\File Io\Logo Kelompok Informatika.jpg" alt="">
+    </div>
+    <!-- Group name -->
+    <h1 class="text-2xl font-bold select-none">Kelompok 4</h1>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="pt-20">
+
+    <!-- HOMEPAGE CONTENT -->
+    <section id="homepage" class="relative min-h-[calc(100vh-5rem)] overflow-hidden">
+      <!-- Slideshow Background Container -->
+      <div
+        id="slideshow"
+        class="absolute inset-0 -z-10 overflow-hidden rounded-0-3xl"
+        aria-label="Slideshow latar belakang"
+      >
+        <!-- Images will be inserted dynamically by JS -->
+      </div>
+
+      <!-- Profiles container -->
+      <div
+        class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col sm:flex-row justify-center gap-8"
+        aria-label="Profil anggota kelompok"
+      >
+        <!-- Each profile: photo + short bio box -->
+        <!-- Profiles inserted dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- DETAIL PAGE CONTENT (hidden initially) -->
+    <section
+      id="detailpage"
+      class="hidden min-h-[calc(100vh-5rem)] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 rounded-3xl bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 shadow-lg"
+      aria-label="Halaman detail individu"
+    >
+      <button
+        id="backButton"
+        class="mb-8 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        aria-label="Kembali ke halaman beranda"
+      >
+        &larr; Kembali
+      </button>
+
+      <div id="detailContent" class="flex flex-col md:flex-row gap-8">
+        <!-- Left side: photos stacked vertically -->
+        <div id="detailPhotos" class="flex flex-col gap-6 md:w-1/2">
+          <!-- Photos inserted dynamically by JS -->
+        </div>
+        <!-- Right side: text descriptions -->
+        <div id="detailTexts" class="flex flex-col gap-6 md:w-1/2">
+          <!-- Texts inserted dynamically by JS -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ===== DATA DEFINITIONS =====
+    // Background slideshow images (16:9 ratio)
+    const slideshowImages = [
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80',
+      'https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=1920&q=80',
+    ];
+
+    // Group members data
+    const members = [
+      {
+        id: 'member1',
+        name: 'Andi Pratama',
+        profilePhoto:
+          'https://randomuser.me/api/portraits/men/32.jpg',
+        shortBio:
+          'Andi adalah ketua kelompok yang ahli dalam pengembangan web dan desain UI/UX.',
+        detailPhotos: [
+          {
+            src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+            alt: 'Andi sedang presentasi',
+            description:
+              'Andi sedang mempresentasikan hasil proyek kelompok di depan kelas.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
+            alt: 'Andi bekerja di laptop',
+            description:
+              'Andi fokus mengerjakan coding dan desain antarmuka aplikasi.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80',
+            alt: 'Andi berdiskusi dengan tim',
+            description:
+              'Andi berdiskusi dengan anggota kelompok untuk menyelesaikan masalah teknis.',
+          },
+        ],
+      },
+      {
+        id: 'member2',
+        name: 'Bunga Sari',
+        profilePhoto:
+          'https://randomuser.me/api/portraits/women/44.jpg',
+        shortBio:
+          'Bunga adalah anggota yang bertanggung jawab pada riset dan dokumentasi proyek.',
+        detailPhotos: [
+          {
+            src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+            alt: 'Bunga menulis catatan',
+            description:
+              'Bunga sedang mencatat hasil riset untuk dokumentasi proyek.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=800&q=80',
+            alt: 'Bunga membaca buku',
+            description:
+              'Bunga membaca referensi untuk memperdalam materi proyek.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+            alt: 'Bunga berdiskusi dengan tim',
+            description:
+              'Bunga berdiskusi dengan anggota lain untuk menyusun laporan akhir.',
+          },
+        ],
+      },
+      {
+        id: 'member3',
+        name: 'Cahyo Nugroho',
+        profilePhoto:
+          'https://randomuser.me/api/portraits/men/65.jpg',
+        shortBio:
+          'Cahyo ahli dalam backend development dan pengelolaan database kelompok.',
+        detailPhotos: [
+          {
+            src: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80',
+            alt: 'Cahyo mengelola server',
+            description:
+              'Cahyo sedang mengelola server dan database untuk aplikasi kelompok.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
+            alt: 'Cahyo menulis kode backend',
+            description:
+              'Cahyo menulis kode backend yang efisien dan aman.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+            alt: 'Cahyo berdiskusi teknis',
+            description:
+              'Cahyo berdiskusi dengan tim untuk integrasi sistem.',
+          },
+        ],
+      },
+      {
+        id: 'member4',
+        name: 'Dewi Lestari',
+        profilePhoto:
+          'https://randomuser.me/api/portraits/women/68.jpg',
+        shortBio:
+          'Dewi bertugas sebagai desainer grafis dan pengelola konten visual kelompok.',
+        detailPhotos: [
+          {
+            src: 'https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=800&q=80',
+            alt: 'Dewi mendesain poster',
+            description:
+              'Dewi sedang mendesain poster promosi untuk proyek kelompok.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+            alt: 'Dewi mengedit foto',
+            description:
+              'Dewi mengedit foto dan membuat konten visual menarik.',
+          },
+          {
+            src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+            alt: 'Dewi presentasi desain',
+            description:
+              'Dewi mempresentasikan konsep desain kepada anggota kelompok.',
+          },
+        ],
+      },
+    ];
+
+    // ===== DOM REFERENCES =====
+    const slideshowContainer = document.getElementById('slideshow');
+    const homepageSection = document.getElementById('homepage');
+    const detailpageSection = document.getElementById('detailpage');
+    const detailPhotosContainer = document.getElementById('detailPhotos');
+    const detailTextsContainer = document.getElementById('detailTexts');
+    const backButton = document.getElementById('backButton');
+
+    // ===== SLIDESHOW IMPLEMENTATION =====
+    let currentSlideIndex = 0;
+    let slideshowElements = [];
+
+    /**
+     * Initialize slideshow images in the background container.
+     * Each image is absolutely positioned and covers the container.
+     */
+    function initSlideshow() {
+      slideshowImages.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `Slideshow image ${i + 1}`;
+        img.className =
+          'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out rounded-b-3xl';
+        img.style.opacity = i === 0 ? '1' : '0';
+        slideshowContainer.appendChild(img);
+        slideshowElements.push(img);
+      });
+    }
+
+    /**
+     * Change slideshow image with fade transition.
+     */
+    function changeSlide() {
+      const prevIndex = currentSlideIndex;
+      currentSlideIndex = (currentSlideIndex + 1) % slideshowImages.length;
+
+      // Fade out previous image
+      slideshowElements[prevIndex].style.opacity = '0';
+      // Fade in current image
+      slideshowElements[currentSlideIndex].style.opacity = '1';
+    }
+
+    // ===== HOMEPAGE PROFILES RENDERING =====
+
+    /**
+     * Create and return a profile card element for homepage.
+     * @param {Object} member - member data object
+     * @returns {HTMLElement}
+     */
+    function createProfileCard(member) {
+      // Container for profile photo and bio
+      const container = document.createElement('article');
+      container.className =
+        'flex flex-col items-center max-w-xs w-full cursor-pointer select-none';
+
+      // Profile photo container (square 1:1)
+      const photoWrapper = document.createElement('div');
+      photoWrapper.className =
+        'w-32 h-32 sm:w-40 sm:h-40 rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105';
+      photoWrapper.setAttribute('tabindex', '0');
+      photoWrapper.setAttribute('role', 'button');
+      photoWrapper.setAttribute('aria-label', `Lihat detail ${member.name}`);
+
+      const img = document.createElement('img');
+      img.src = member.profilePhoto;
+      img.alt = `Foto profil ${member.name}`;
+      img.className = 'w-full h-full object-cover';
+
+      photoWrapper.appendChild(img);
+
+      // Bio box below photo
+      const bioBox = document.createElement('div');
+      bioBox.className =
+        'mt-3 p-4 bg-white rounded-xl shadow-md text-center text-gray-700 text-sm sm:text-base';
+      bioBox.textContent = member.shortBio;
+
+      container.appendChild(photoWrapper);
+      container.appendChild(bioBox);
+
+      // Click and keyboard enter to open detail page
+      photoWrapper.addEventListener('click', () => openDetailPage(member.id));
+      photoWrapper.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openDetailPage(member.id);
+        }
+      });
+
+      return container;
+    }
+
+    /**
+     * Render all profile cards on homepage.
+     */
+    function renderProfiles() {
+      const profilesContainer = homepageSection.querySelector(
+        '[aria-label="Profil anggota kelompok"]'
+      );
+      members.forEach((member) => {
+        const card = createProfileCard(member);
+        profilesContainer.appendChild(card);
+      });
+    }
+
+    // ===== DETAIL PAGE RENDERING =====
+
+    /**
+     * Clear detail page content containers.
+     */
+    function clearDetailContent() {
+      detailPhotosContainer.innerHTML = '';
+      detailTextsContainer.innerHTML = '';
+    }
+
+    /**
+     * Render detail page content for a given member id.
+     * @param {string} memberId
+     */
+    function renderDetailPage(memberId) {
+      clearDetailContent();
+      const member = members.find((m) => m.id === memberId);
+      if (!member) return;
+
+      // For each detail photo, create left photo and right text
+      member.detailPhotos.forEach((item, index) => {
+        // Photo container with fixed 16:9 aspect ratio
+        const photoDiv = document.createElement('div');
+        photoDiv.className =
+          'w-full aspect-[16/9] rounded-xl overflow-hidden shadow-md flex-shrink-0';
+        // Positioning photos vertically: first top, second center, third bottom
+        // We rely on flex-col gap in container for spacing
+
+        const img = document.createElement('img');
+        img.src = item.src;
+        img.alt = item.alt;
+        img.className = 'w-full h-full object-cover';
+
+        photoDiv.appendChild(img);
+        detailPhotosContainer.appendChild(photoDiv);
+
+        // Text container
+        const textDiv = document.createElement('article');
+        textDiv.className =
+          'bg-white p-4 rounded-xl shadow-md text-gray-800 text-sm sm:text-base flex items-center';
+        textDiv.textContent = item.description;
+
+        detailTextsContainer.appendChild(textDiv);
+      });
+    }
+
+    /**
+     * Show detail page and hide homepage.
+     * @param {string} memberId
+     */
+    function openDetailPage(memberId) {
+      homepageSection.classList.add('hidden');
+      detailpageSection.classList.remove('hidden');
+      renderDetailPage(memberId);
+      // Scroll top for better UX
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Show homepage and hide detail page.
+     */
+    function backToHomepage() {
+      detailpageSection.classList.add('hidden');
+      homepageSection.classList.remove('hidden');
+      // Scroll top for better UX
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== EVENT LISTENERS =====
+    backButton.addEventListener('click', backToHomepage);
+
+    // ===== INITIALIZATION =====
+    initSlideshow();
+    renderProfiles();
+
+    // Start slideshow interval (3 seconds)
+    setInterval(changeSlide, 3000);
+  </script>
+</body>
+</html>
